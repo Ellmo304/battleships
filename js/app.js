@@ -10,12 +10,14 @@ var ship = null;
 var $battleLog = $('#battleLog');
 var $cpuBattleLog = $('#cpuBattleLog');
 var playerShipIsHorizontal = true;
+
 //variables to count hits on ships/check if cpu has sunk your ships/won game
 var ACFCRcounter = 0;
 var BTSPcounter = 0;
 var CR1counter = 0;
 var CR2counter = 0;
 var DScounter = 0;
+
 //variables to count hits on humans ships/check if human has sunk cpu's ships/won game
 var myACFCRcounter = 0;
 var myBTSPcounter = 0;
@@ -38,9 +40,9 @@ var sunkCPU = new Audio('../audio/sunk1.wav');
 var sunkHuman = new Audio('../audio/sunk3.wav');
 var shipSunk = new Audio('../audio/shipSunk.wav');
 
-$('.sea').text('SEA');
-$('.miss').text('MISS');
-$('.hit').text('HIT');
+// $('.sea').text('SEA');
+// $('.miss').text('MISS');
+// $('.hit').text('HIT');
 
 //click listener on rotate button, triggering ishorizontal to be true or false
 $rotateBtn.on('click', function() {
@@ -114,7 +116,7 @@ function placeShip(index, ship, isHorizontal, $tiles) {
   } else {
     for (i = 0; i < ship.length; i++) {
       $tile = $tiles.eq(index+j);
-      $tile.text(ship);
+      // $tile.text(ship);
       $tile.addClass('ship');
       j+= isHorizontal ? 1 : 10;
     }
@@ -155,8 +157,8 @@ function checkForWin() {
 //function which determines if player makes hit or miss, updating tiles class in response, as well as battlelog, ending by checking for win
 function isHit() {
 
-  switch ($(this).text()) {
-    case 'SEA' : $battleLog.text('No hits this time');
+  switch ($(this).hasClass()) {
+    case 'sea' : $battleLog.text('No hits this time');
       break;
     case 'ACFCR' : $battleLog.text('Player 1 hits cpu\'s aircraft carrier!'); (myACFCRcounter ++);
       break;
@@ -171,7 +173,7 @@ function isHit() {
   }
   if ($(this).hasClass('ship')) {
     hitNoise.play(); hitNoise.currentTime = 0;
-    $(this).addClass('hit'); $(this).text('HIT');$(this).removeClass('ship');
+    $(this).addClass('hit');$(this).removeClass('ship');
   } else {
     $(this).addClass('miss'); $(this).removeClass('sea');
     splashNoise.play(); splashNoise.currentTime = 0;
@@ -241,8 +243,8 @@ function cpuFire() {
   if ($cpuCellChosen.hasClass('ship')) {
     $hitIndex = $cpuCellChosen;
   }
-  switch ($cpuCellChosen.text()) {
-    case 'SEA' : $cpuBattleLog.text('No hits this time');
+  switch ($cpuCellChosen.hasClass()) {
+    case 'sea' : $cpuBattleLog.text('No hits this time');
       break;
     case 'ACFCR' : $cpuBattleLog.text('CPU hits player 1\'s aircraft carrier!'); (ACFCRcounter ++);
       break;
@@ -257,7 +259,7 @@ function cpuFire() {
   }
   if ($cpuCellChosen.hasClass('ship')) {
     hitNoise.play(); hitNoise.currentTime = 0;
-    $cpuCellChosen.addClass('hit'); $cpuCellChosen.text('HIT');$cpuCellChosen.removeClass('ship');
+    $cpuCellChosen.addClass('hit');$cpuCellChosen.removeClass('ship');
   } else {
     $cpuCellChosen.addClass('miss'); $cpuCellChosen.removeClass('sea');
     splashNoise.play(); splashNoise.currentTime = 0;
