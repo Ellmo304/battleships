@@ -1,0 +1,135 @@
+body {
+  background-color: white;
+  overflow: auto;
+}
+
+.title {
+  display: block;
+  font-size: 100px;
+  margin-left: -40px;
+  text-align: center;
+  color: lime;
+  font-family: 'Raleway', sans-serif;
+  margin-bottom: 20px;
+  text-shadow: 3px 3px green;
+}
+
+table {
+  table-layout: fixed;
+}
+
+#battleLog, #cpuBattleLog {
+height: 100px;
+width: 494px;
+line-height: 50px;
+text-align: center;
+display: inline-block;
+background-color: black;
+font-size: 20px;
+font-weight: bolder;
+margin: 10px;
+color: lime;
+font-family: "Courier New";
+border: 5px solid lime;
+overflow: auto;
+box-shadow: 6px 6px 5px #888888;
+}
+
+#cpuBattleLog {
+  box-shadow: -6px 6px 5px #888888;
+}
+
+#wrapper {
+  background-color: white;
+  margin: 0 auto;
+  width: 1100px;
+}
+
+.board {
+  width: 505px;
+  display: inline-block;
+  padding: 10px;
+}
+
+tr {
+  width:500px;
+  height: 50px;
+}
+
+td {
+  border: 1px solid lime;
+  width: 50px;
+  word-break:break-all;
+  height: 50px;
+  color: rgba(0,0,0,0);
+  overflow: hidden;
+}
+
+#playerBoard {
+  /*background-image: url("../images/oceanBG.xcf");*/
+  background-image: url("../images/seaBG.jpg");
+  border: 5px solid lime;
+  display: inline-block;
+  box-shadow: 6px 6px 5px #888888;
+}
+
+#cpuBoard {
+  /*background-image: url("../images/oceanBG.xcf");*/
+  background-image: url("../images/seaBG.jpg");
+  display: inline-block;
+  border: 5px solid lime;
+  box-shadow: -6px 6px 5px #888888;
+}
+
+.hover {
+  background-image: url("../images/hoverIcon.png");
+  background-size: contain;
+}
+
+#playerBoard .ship {
+  background-image: url("../images/placedIcon.png");
+  background-size: contain;
+  color: rgba(0,0,0,0);
+}
+
+.sea {
+color: rgba(0,0,0,0);
+}
+
+.hit {
+  background-image: url("../images/hitIcon.png");
+  background-size: contain;
+  color: rgba(0,0,0,0,);
+}
+
+.miss {
+  background-image: url("../images/missIcon.png");
+  background-size: cover;
+  color: rgba(0,0,0,0);
+}
+
+h1 {
+  display: inline;
+  margin-left: 360px;
+  margin-top: 20px;
+  text-align: center;
+  font-size: 30px;
+  font-weight: bold;
+  color: black;
+  padding: 10px;
+  font-family: 'Raleway', sans-serif;
+}
+
+#cpuHeader {
+  margin-left: 400px;
+}
+
+button {
+  display: inline-block;
+  padding: 20px;
+  font-family: 'Raleway', sans-serif;
+  background: linear-gradient(white, grey);
+  border: 2px solid ;
+  margin: 10px 0px 20px 3px;
+  box-shadow: 3px 3px 5px #888888;
+}
