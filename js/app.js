@@ -147,7 +147,7 @@ function checkForWin() {
     $battleLog.text('You\'ve sunk the opposition!!! Player 1 IS VICTORIOUS!!!');
     $cpuBattleLog.text('CPU loses!!!');
   } else {
-    setTimeout(cpusChoice, 1750);
+    setTimeout(cpusChoice, 1500);
   }
 }
 
@@ -169,7 +169,7 @@ function isHit() {
   }
   if ($(this).hasClass('ship')) {
     hitNoise.play(); hitNoise.currentTime = 0;
-    $(this).addClass('hit');$(this).removeClass('ship');
+    $(this).addClass('hit');$(this).removeClass('ship');$(this).removeClass('sea');
   } else {
     $(this).addClass('miss'); $(this).removeClass('sea');
     splashNoise.play(); splashNoise.currentTime = 0;
@@ -250,11 +250,11 @@ function cpuFire() {
       break;
     case 'DS' : $cpuBattleLog.text('CPU hits player 1\'s destroyer!'); DScounter ++;
       break;
-    default : $battleLog.text('No hits this time');
+    default : $cpuBattleLog.text('No hits this time');
   }
   if ($cpuCellChosen.hasClass('ship')) {
     hitNoise.play(); hitNoise.currentTime = 0;
-    $cpuCellChosen.addClass('hit');$cpuCellChosen.removeClass('ship');
+    $cpuCellChosen.addClass('hit');$cpuCellChosen.removeClass('ship'); $cpuCellChosen.removeClass('sea');
   } else {
     $cpuCellChosen.addClass('miss'); $cpuCellChosen.removeClass('sea');
     splashNoise.play(); splashNoise.currentTime = 0;
@@ -312,17 +312,18 @@ function lookForShip() {
     }
     $cpuCellChosen = $chosenIndex;
     console.log($chosenIndex);
+    if ($cpuCellChosen.length === 0 || $cpuCellChosen.hasClass('hit') || $cpuCellChosen.hasClass('miss'))  {
+      console.log('looking for ship again');
+      lookForShip();
+    } else {
+      cpuFire();
+    }
   } else {
-    $hitIndex = false; cpusChoice();
+    $hitIndex = false; $cpuCellChosen = false; cpusChoice();
     console.log('hitindex reset', $hitIndex);
   }
 
-  if ($cpuCellChosen.length === 0 || $cpuCellChosen.hasClass('hit') || $cpuCellChosen.hasClass('miss'))  {
-    console.log('looking for ship again');
-    lookForShip();
-  } else {
-    cpuFire();
-  }
+
 }
 //---------------------------------------------------------------------
 //function on cpus turn to decide whether to choose randomly or target a found ship
