@@ -5,11 +5,8 @@ var $playersTiles = $playerBoard.find('td');
 var $cpuTiles = $cpuBoard.find('td');
 var $playBtn = $('#playButton');
 var $rotateBtn = $('#rotateButton');
-var shipsSelected = 0;
-var ship = null;
 var $battleLog = $('#battleLog');
 var $cpuBattleLog = $('#cpuBattleLog');
-var playerShipIsHorizontal = true;
 
 //variables to count hits on ships/check if cpu has sunk your ships/won game
 var ACFCRcounter = 0;
@@ -25,6 +22,9 @@ var myCR1counter = 0;
 var myCR2counter = 0;
 var myDScounter = 0;
 
+var playerShipIsHorizontal = true;
+var shipsSelected = 0;
+var ship = null;
 var $cpuCellChosen = null;
 var $hitIndex = false;
 
@@ -40,9 +40,6 @@ var sunkCPU = new Audio('../audio/sunk1.wav');
 var sunkHuman = new Audio('../audio/sunk3.wav');
 var shipSunk = new Audio('../audio/shipSunk.wav');
 
-// $('.sea').text('SEA');
-// $('.miss').text('MISS');
-// $('.hit').text('HIT');
 
 //click listener on rotate button, triggering ishorizontal to be true or false
 $rotateBtn.on('click', function() {
@@ -79,7 +76,7 @@ function selectShip() {
       $playerBoard.off('mouseout').off('mouseover'); buttonOff.play(); buttonOff.currentTime = 0;
     }
   });
-  //statement to diable buttons once ships placed and change battlelog html
+  //statement to disable buttons once ships placed and change battlelog html
   if (shipsSelected === 5) {
     $playBtn.prop('disabled', false);
     $rotateBtn.prop('disabled', true);
@@ -116,8 +113,9 @@ function placeShip(index, ship, isHorizontal, $tiles) {
   } else {
     for (i = 0; i < ship.length; i++) {
       $tile = $tiles.eq(index+j);
-      // $tile.text(ship);
       $tile.addClass('ship');
+      $tile.attr('name', ship);
+      // console.log($tile.attr('name'));
       j+= isHorizontal ? 1 : 10;
     }
     return true;
@@ -127,7 +125,6 @@ function placeShip(index, ship, isHorizontal, $tiles) {
 function placeShipRandomly(ship, $tiles) {
   var randomIndex = Math.floor(Math.random() * $tiles.length);
   var isHorizontal = Math.floor(Math.random()*2) === 1;
-
   return placeShip(randomIndex, ship, isHorizontal, $tiles);
 }
 
@@ -156,10 +153,8 @@ function checkForWin() {
 
 //function which determines if player makes hit or miss, updating tiles class in response, as well as battlelog, ending by checking for win
 function isHit() {
-
-  switch ($(this).hasClass()) {
-    case 'sea' : $battleLog.text('No hits this time');
-      break;
+  // console.log($(this).attr('class'));
+  switch ($(this).attr('name')) {
     case 'ACFCR' : $battleLog.text('Player 1 hits cpu\'s aircraft carrier!'); (myACFCRcounter ++);
       break;
     case 'BTSP' : $battleLog.text('Player 1 hits cpu\'s battleship!'); myBTSPcounter ++;
@@ -170,6 +165,7 @@ function isHit() {
       break;
     case 'DS' : $battleLog.text('Player 1 hits cpu\'s destroyer!'); myDScounter ++;
       break;
+    default : $battleLog.text('No hits this time');
   }
   if ($(this).hasClass('ship')) {
     hitNoise.play(); hitNoise.currentTime = 0;
@@ -233,7 +229,7 @@ function checkForCpuWin() {
     $battleLog.text('All your ships have been sunk! You have been defeated!!!');
     $cpuBattleLog.text('CPU IS VICTORIOUS!!!');
   } else {
-    setTimeout(playersTurn, 1750);
+    setTimeout(playersTurn, 1500);
   }
 }
 
@@ -243,9 +239,7 @@ function cpuFire() {
   if ($cpuCellChosen.hasClass('ship')) {
     $hitIndex = $cpuCellChosen;
   }
-  switch ($cpuCellChosen.hasClass()) {
-    case 'sea' : $cpuBattleLog.text('No hits this time');
-      break;
+  switch ($cpuCellChosen.attr('name')) {
     case 'ACFCR' : $cpuBattleLog.text('CPU hits player 1\'s aircraft carrier!'); (ACFCRcounter ++);
       break;
     case 'BTSP' : $cpuBattleLog.text('CPU hits player 1\'s battleship!'); BTSPcounter ++;
@@ -256,6 +250,7 @@ function cpuFire() {
       break;
     case 'DS' : $cpuBattleLog.text('CPU hits player 1\'s destroyer!'); DScounter ++;
       break;
+    default : $battleLog.text('No hits this time');
   }
   if ($cpuCellChosen.hasClass('ship')) {
     hitNoise.play(); hitNoise.currentTime = 0;
@@ -291,22 +286,17 @@ function cpuFire() {
   }
   checkForCpuWin();
 }
-  //-------------------------------------------------------------
-  //function for ai to kill human ship once discovered
+//-------------------------------------------------------------
+//function for ai to kill human ship once discovered
 function lookForShip() {
   console.log('looking for ship');
-
-
 
   const $boolA = $playersTiles.eq($hitIndex + 1);
   const $boolB = $playersTiles.eq($hitIndex - 1);
   const $boolC = $playersTiles.eq($hitIndex + 10);
   const $boolD = $playersTiles.eq($hitIndex - 10);
 
-
-  console.log($boolA.hasClass('sea'));
-
-  if (($boolA.hasClass('sea') === true || $boolB.hasClass('sea') === true || $boolC.hasClass('sea') === true || $boolD.hasClass('sea') === true || $boolA.hasClass('ship') === true || $boolB.hasClass('ship') === true || $boolC.hasClass('ship') === true || $boolD.hasClass('sea') === true)) {
+  if (($boolA.hasClass('sea') === true || $boolB.hasClass('sea') === true || $boolC.hasClass('sea') === true || $boolD.hasClass('sea') === true || $boolA.hasClass('ship') === true || $boolB.hasClass('ship') === true || $boolC.hasClass('ship') === true || $boolD.hasClass('ship') === true)) {
 
     var randomIndex2 = Math.ceil(Math.random() * 4);
     var $chosenIndex = 0;
@@ -320,19 +310,22 @@ function lookForShip() {
       case 4 : $chosenIndex = $boolD ;
         break;
     }
-
     $cpuCellChosen = $chosenIndex;
-    if ($cpuCellChosen.length === 0 || $cpuCellChosen.hasClass('hit') || $cpuCellChosen.hasClass('miss'))  {
-      lookForShip();
-    } else {
-      cpuFire();
-    }
+    console.log($chosenIndex);
   } else {
     $hitIndex = false; cpusChoice();
+    console.log('hitindex reset', $hitIndex);
+  }
+
+  if ($cpuCellChosen.length === 0 || $cpuCellChosen.hasClass('hit') || $cpuCellChosen.hasClass('miss'))  {
+    console.log('looking for ship again');
+    lookForShip();
+  } else {
+    cpuFire();
   }
 }
-  //---------------------------------------------------------------------
-  //function on cpus turn to decide whether to choose randomly or target a found ship
+//---------------------------------------------------------------------
+//function on cpus turn to decide whether to choose randomly or target a found ship
 function cpusChoice() {
   $cpuBoard.off('click');
   if ($hitIndex !== false) {
